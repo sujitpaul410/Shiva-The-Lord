@@ -2,7 +2,7 @@
 #define H_DIFF 100
 extern int posx=-180,posy=-180,timer=0,blinkState=0;
 extern int signx=20,signy=20;
-Texture2D start, about, exit, startSelected, aboutSelected, exitSelected, idle, mainImg, runImg;
+Texture2D start, about, exit, startSelected, aboutSelected, exitSelected, idle, mainImg, runImg, ground, ground1;
 extern int dbg=0, cf=0, idleState=0, fc=0, cf1=0;
 
 int main(void)
@@ -23,6 +23,8 @@ int main(void)
 	idle=LoadTexture("Resources/Images/Idle.png");
 	mainImg=LoadTexture("Resources/Images/1.png");
 	runImg=LoadTexture("Resources/Images/RunAnim.png");
+	ground=LoadTexture("Resources/Images/ground1.png");
+	ground1=LoadTexture("Resources/Images/ground1.png");
 
 	Rectangle startBound = { screenWidth/10, screenHeight/3, start.width, start.height };
 	Rectangle aboutBound = { screenWidth/10, (screenHeight/3)+100, start.width, start.height };
@@ -83,11 +85,18 @@ int main(void)
 	}
 	else if(blinkState==3)
 	{
+		setGround();
 		if(IsKeyDown(KEY_W))
 		{
 			idleState=0;
 			//printf("KeyDownDetected..\n");
+			scrollGround();
 			startGame(frame, frame1);
+			if(!checkIsGrounded())
+			{
+				//printf("You Died..\n");
+				//return;
+			}		
 		}
 		else
 		{
