@@ -6,3 +6,4 @@ void scrollGround();
 
 float getPlatPos();
 bool checkIsGrounded();
+bool isTreeGrounded(Rectangle rec);

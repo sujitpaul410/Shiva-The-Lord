@@ -3,7 +3,9 @@
 extern int posx=-180,posy=-180,timer=0,blinkState=0;
 extern int signx=20,signy=20;
 Texture2D start, about, exit, startSelected, aboutSelected, exitSelected, idle, mainImg, runImg, ground, ground1;
+Texture2D tree, tree1, ground2,jumptex, fireball;
 extern int dbg=0, cf=0, idleState=0, fc=0, cf1=0;
+Texture2D water;
 
 int main(void)
 {
@@ -25,6 +27,12 @@ int main(void)
 	runImg=LoadTexture("Resources/Images/RunAnim.png");
 	ground=LoadTexture("Resources/Images/ground1.png");
 	ground1=LoadTexture("Resources/Images/ground1.png");
+	tree=LoadTexture("Resources/Images/Tree1.png");
+	tree1=LoadTexture("Resources/Images/Tree2.png");
+	ground2=LoadTexture("Resources/Images/ground2.png");
+	water=LoadTexture("Resources/Images/water.png");
+	jumptex=LoadTexture("Resources/Images/jump.png");
+	fireball=LoadTexture("Resources/Images/fireball.png");
 
 	Rectangle startBound = { screenWidth/10, screenHeight/3, start.width, start.height };
 	Rectangle aboutBound = { screenWidth/10, (screenHeight/3)+100, start.width, start.height };
@@ -34,6 +42,7 @@ int main(void)
 
 	Rectangle frame={0.0f, 0.0f, (float)idle.width/3, (float)idle.height};
 	Rectangle frame1={0.0f, 0.0f, (float)runImg.width/8, (float)runImg.height};
+	jumplanded=true;
 
     SetTargetFPS(60);               // Set our game to run at 60 frames-per-second
     //--------------------------------------------------------------------------------------
@@ -86,7 +95,7 @@ int main(void)
 	else if(blinkState==3)
 	{
 		setGround();
-		if(IsKeyDown(KEY_W))
+		if(IsKeyDown(KEY_W) && !IsKeyPressed(KEY_SPACE) && jumplanded)
 		{
 			idleState=0;
 			//printf("KeyDownDetected..\n");
@@ -96,12 +105,53 @@ int main(void)
 			{
 				//printf("You Died..\n");
 				//return;
-			}		
+			}
+			if(!fireballextngshd)
+			{
+				shoot();
+			}
+			//jump(frame);	
+		}
+		else if(IsKeyDown(KEY_W) && IsKeyPressed(KEY_SPACE) && jumplanded)
+		{
+			idleState=0;
+			//startGame(frame, frame1);
+			jumpfar(frame);
+			if(!checkIsGrounded())
+			{
+				//printf("You Died..\n");
+				//return;
+			}
+			if(!fireballextngshd)
+			{
+				shoot();
+			}
+			//jump(frame);	
+		}
+		else if(IsKeyPressed(KEY_SPACE) || !jumplanded)
+		{
+			jumpfar(frame);
+			idleState=3;
+			if(!fireballextngshd)
+			{
+				shoot();
+			}
+		}
+		else if(IsKeyPressed(KEY_D) || !fireballextngshd)
+		{
+			idleState=1;
+			startGame(frame1, frame);
+			fireballextngshd=false;
+			shoot();
 		}
 		else
 		{
-			idleState=1;
-			startGame(frame, frame1);
+			if(jumplanded)
+			{
+				idleState=1;
+				resetjump();
+				startGame(frame, frame1);
+			}
 		}
 	}
         // Draw

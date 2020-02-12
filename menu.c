@@ -51,13 +51,13 @@ void startGame(Rectangle frame, Rectangle frame1)
 	if(idleState==0)
 	{
 		frame1.x=(float)cf1*(float)runImg.width/8;
-		if(cf1>=7)
+		if(cf1>=8)
 		{
 			cf1=0;
 			fc=0;
 		}
 		DrawTextureRec(runImg, frame1, pos, WHITE);
-		if(fc%20==0)
+		if(fc%10==0)
 		{
 			//cf++;
 			cf1++;
