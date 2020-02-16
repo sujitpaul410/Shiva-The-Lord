@@ -8,8 +8,8 @@ int genRandNum()
 	int num;
 
 	srand(time(NULL));
-	num=rand()%10+1;
+	num = rand() % 10 + 1;
 
-	printf("Num is %d\n",num);
+	//printf("Num is %d\n", num);
 	return num;
 }
